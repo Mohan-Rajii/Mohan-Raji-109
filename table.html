@@ -1,0 +1,6 @@
+document.addEventListener("DOMContentLoaded", function () {
+    // Retrieve data from localStorage
+    document.getElementById("customer-name").textContent = localStorage.getItem("username") || "Guest";
+    document.getElementById("customer-email").textContent = localStorage.getItem("email") || "N/A";
+    document.getElementById("customer-phone").textContent = localStorage.getItem("phone") || "N/A";
+});

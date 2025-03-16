@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohan Raji </title>
+    
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="styles.css"> <!-- External CSS -->
+</head>
+<body>
+    <h1>REGISTRATION FORM</h1>
+    <form name="RegForm" onsubmit="return validateForm()">        
+        <p>            
+            <label for="firstname">First Name:</label>            
+            <input type="text" id="firstname" name="firstname" placeholder="Enter First Name" required/>            
+            <span id="firstname-error" class="error-message"></span>        
+        </p>        
+        <p>            
+            <label for="lastname">Last Name:</label>            
+            <input type="text" id="lastname" name="lastname" placeholder="Enter Last Name" required/>            
+            <span id="lastname-error" class="error-message"></span>        
+        </p>        
+        <p>            
+            <label for="dob">Date of Birth:</label>            
+            <input type="date" id="dob" name="dob" required onchange="calculateAge()"/>            
+            <span id="dob-error" class="error-message"></span>        
+        </p>        
+        <p>            
+            <label for="age">Age:</label>            
+            <input type="text" id="age" name="age" readonly/>            
+            <span id="age-error" class="error-message"></span>        
+        </p>        
+        <p>            
+            <label for="gender">Gender:</label>            
+            <select id="gender" name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>            
+            <span id="gender-error" class="error-message"></span>        
+        </p>        
+        <p>            
+            <label for="password">Password:</label>            
+            <input type="password" id="password" name="password" placeholder="Enter Password" required/>            
+            <span id="password-error" class="error-message"></span>        
+        </p>        
+        <p>            
+            <label for="email">Email:</label>            
+            <input type="text" id="email" name="email" placeholder="Enter Email" required/>            
+            <span id="email-error" class="error-message"></span>        
+        </p>        
+        <p>            
+            <label for="phone">Phone Number:</label>            
+            <input type="tel" id="phone" name="phone" placeholder="Enter Phone Number" required/>            
+            <span id="phone-error" class="error-message"></span>        
+        </p>        
+        <p>            
+            <label for="address">Address:</label>            
+            <textarea id="address" name="address" placeholder="Enter Address" required></textarea>            
+            <span id="address-error" class="error-message"></span>        
+        </p>        
+        <p>            
+            <input type="submit" value="Submit" name="Submit"/>        
+        </p>    
+    </form>    
+
+    <script>
+        function calculateAge() {
+            let dob = document.getElementById("dob").value;
+            let ageField = document.getElementById("age");
+            if (dob) {
+                let birthDate = new Date(dob);
+                let today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                let monthDiff = today.getMonth() - birthDate.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                ageField.value = age;
+            } else {
+                ageField.value = "";
+            }
+        }
+
+        function validateForm() {            
+            let firstname = document.getElementById("firstname").value.trim();            
+            let lastname = document.getElementById("lastname").value.trim();            
+            let dob = document.getElementById("dob").value;
+            let gender = document.getElementById("gender").value;
+            let password = document.getElementById("password").value.trim();            
+            let email = document.getElementById("email").value.trim();            
+            let phone = document.getElementById("phone").value.trim();            
+            let address = document.getElementById("address").value.trim();            
+
+            const errors = {
+                firstname: document.getElementById("firstname-error"),
+                lastname: document.getElementById("lastname-error"),
+                dob: document.getElementById("dob-error"),
+                gender: document.getElementById("gender-error"),
+                password: document.getElementById("password-error"),
+                email: document.getElementById("email-error"),
+                phone: document.getElementById("phone-error"),
+                address: document.getElementById("address-error"),
+            };
+
+            Object.values(errors).forEach(error => error.textContent = "");
+
+            let isValid = true;
+
+            if (!/^[a-zA-Z]+$/.test(firstname) || firstname.length < 4) {
+                errors.firstname.textContent = "First Name must contain only letters and be at least 4 characters.";
+                isValid = false;
+            }
+
+            if (!/^[a-zA-Z]+$/.test(lastname) || lastname.length < 1) {
+                errors.lastname.textContent = "Last Name should only contain letters.";
+                isValid = false;
+            }
+
+            if (!dob) {
+                errors.dob.textContent = "Please select your date of birth.";
+                isValid = false;
+            }
+
+            if (!gender) {
+                errors.gender.textContent = "Please select a gender.";
+                isValid = false;
+            }
+
+            if (password.length < 8 || password.length > 30) {
+                errors.password.textContent = "Password must be between 8 and 30 characters.";
+                isValid = false;
+            }
+
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailPattern.test(email)) {
+                errors.email.textContent = "Invalid email format.";
+                isValid = false;
+            }
+
+            if (!/^\d{10}$/.test(phone)) {
+                errors.phone.textContent = "Phone number must be exactly 10 digits.";
+                isValid = false;
+            }
+
+            if (address.length === 0) {
+                errors.address.textContent = "Address cannot be empty.";
+                isValid = false;
+            }
+
+            if (isValid) {
+                alert("Registered Successfully!");
+                return true;
+            } else {
+                return false;
+            }
+        }
+        function handleLogin(event) {
+    event.preventDefault(); // Prevent page reload
+
+    // Get form values
+    const username = document.getElementById("username").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+
+    // Store in localStorage
+    localStorage.setItem("username", username);
+    localStorage.setItem("email", email);
+    localStorage.setItem("phone", phone);
+
+    // Redirect to table page
+    window.location.href = "table.html";
+}
+
+    </script>
+</body>
+</html>
